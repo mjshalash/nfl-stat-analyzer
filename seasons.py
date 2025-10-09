@@ -7,6 +7,7 @@ filtered_columns = schedule_stats.filter(
             (pl.col("result").is_not_null()),
             (pl.col("away_team").str.contains("DEN|CAR|DAL")) | (pl.col("home_team").str.contains("DEN|CAR|DAL"))
         ).select(
-            pl.col("season"),pl.col("week"),pl.col("result"),pl.col("away_team"), pl.col("home_team"))
+            ["season","week","result","away_team","home_team"]
+        ).with_columns(pl.when(pl.col("result") > 0).then("home_team").otherwise("away_team").alias("Winner"))
 
 print(filtered_columns)
